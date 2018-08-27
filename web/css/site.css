@@ -113,3 +113,19 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+#login-form,
+#signup-form,
+.site-login,
+.site-signup{
+    max-width: 400px;
+}
+
+.control-label {
+    padding-bottom: 7px;
+}
+
+.capthca {
+    max-width: 304px;
+    margin-bottom: 20px;
+}

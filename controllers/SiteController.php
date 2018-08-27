@@ -2,13 +2,18 @@
 
 namespace app\controllers;
 
+use app\models\SignupForm;
+use app\models\User;
+use app\services\SignupService;
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use yii\base\ErrorException;
 
 class SiteController extends Controller
 {
@@ -62,6 +67,46 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    public function actionSignup(){
+        $form = new SignupForm();
+        if ($form->load(Yii::$app->request->post()) && $form->validate()){
+            $user = new User();
+
+            $user->username = $form->username;
+            $user->password = Yii::$app->getSecurity()->generatePasswordHash($form->password);
+            $user->email = $form->email;
+            $user->activationToken = Yii::$app->getSecurity()->generateRandomString(40);
+            $user->authKey = Yii::$app->getSecurity()->generateRandomString(40);
+
+            try {$success = $user->sendConfirmMail();} catch (\Exception $e) {
+                Yii::error("Ошибка при отправлении письма: ". $e);
+            }
+
+            if ($success){
+                $user->save();
+                Yii::$app->session->setFlash('success', 'Регистрация прошла успешно, осталось только активировать аккаунт по ссылке на почте.');
+                $this->redirect(Url::home());
+            } else {
+                Yii::$app->session->setFlash('error', 'Ошибка при отправлении письма на Вашу почту. Проверьте правильность данных и попробуйте еще раз.');
+                return $this->render('signup', ['model' => $form]);
+            }
+        } else
+            return $this->render('signup', ['model' => $form]);
+    }
+
+    public function actionConfirm($username, $token){
+        $model = User::findByUsername($username);
+        if ($model && $model->activationToken == $token) {
+                $model->isActive = 1;
+                $model->activationToken = NULL;
+                $model->save();
+                Yii::$app->session->setFlash('success', 'Ваш аккаунт активирован!');
+                $this->redirect(Url::toRoute('site/login'));
+        }
+        else
+            return $this->render('error', ['message' => 'Произошла ошибка, аккаунт не активирован']);
     }
 
     /**
