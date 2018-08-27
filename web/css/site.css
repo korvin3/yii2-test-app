@@ -118,7 +118,8 @@ a.desc:after {
 #signup-form,
 .site-login,
 .site-signup{
-    max-width: 400px;
+    max-width: 420px;
+    padding: 10px;
 }
 
 .control-label {

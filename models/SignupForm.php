@@ -21,8 +21,6 @@ class SignupForm extends Model
         ];
     }
 
-    private $_user = false;
-
     /**
      * @return array the validation rules.
      */
@@ -31,6 +29,7 @@ class SignupForm extends Model
         return [
             [['username', 'password', 'email'], 'required', 'message' => "Обязательное поле"],
             ['email', 'email', 'message' => "Введите правильный email"],
+            [['reCaptcha'], 'required', 'message' => "Подтвердите, что вы не робот"],
             [['username'], 'unique', 'targetClass' => User::className(), 'message' => "Пользователь с таким именем уже зарегистрирован"],
             [['email'], 'unique', 'targetClass' => User::className(), 'message' => "Пользователь с такой почтой уже зарегистрирован"],
             //[['reCaptcha'], \himiklab\yii2\recaptcha\ReCaptchaValidator::className(), 'secret' => 'your secret key', 'uncheckedMessage' => 'Please confirm that you are not a bot.']

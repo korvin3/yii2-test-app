@@ -35,11 +35,9 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
             [['username', 'password'], 'required', 'message' => "Обязательное поле"],
-            // rememberMe must be a boolean value
+            [['reCaptcha'], 'required', 'message' => "Подтвердите, что вы не робот"],
             ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
             ['password', 'validatePassword', 'message' => "Неверный пароль или имя пользователя"],
             //[['reCaptcha'], \himiklab\yii2\recaptcha\ReCaptchaValidator::className(), 'secret' => 'your secret key', 'uncheckedMessage' => 'Please confirm that you are not a bot.']
         ];

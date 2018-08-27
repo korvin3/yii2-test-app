@@ -29,7 +29,10 @@ $this->title = 'Вход';
         <?= $form->field($model, 'password')->passwordInput() ?>
 
         <div class="center-block capthca">
-            <?= \himiklab\yii2\recaptcha\ReCaptcha::widget(['name' => 'reCaptcha']) ?>
+            <?= $form->field($model, 'reCaptcha')->widget(
+                \himiklab\yii2\recaptcha\ReCaptcha::className(),
+                ['siteKey' => '6Ld1e2wUAAAAALiGhc1HRGWZHfmPrbWZRdOnWzGh']
+            ) ?>
         </div>
         <? /*$form->field($model, 'rememberMe')->checkbox([
             'template' => "<div class=\"\">{input} {label}</div>\n<div class=\"\">{error}</div>",

@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use app\models\SignupForm;
 use app\models\User;
-use app\services\SignupService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
@@ -69,6 +68,13 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
+
+    /**
+     *  Sign Up action.
+     *
+     * @return string
+     * @throws \Exception if server can't send confirm email.
+     */
     public function actionSignup(){
         $form = new SignupForm();
         if ($form->load(Yii::$app->request->post()) && $form->validate()){
@@ -96,6 +102,12 @@ class SiteController extends Controller
             return $this->render('signup', ['model' => $form]);
     }
 
+
+    /**
+     *  Compare activation token from link with saved.
+     *
+     * @return string
+     */
     public function actionConfirm($username, $token){
         $model = User::findByUsername($username);
         if ($model && $model->activationToken == $token) {

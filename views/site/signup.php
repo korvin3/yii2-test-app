@@ -31,7 +31,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'password')->passwordInput() ?>
 
     <div class="center-block capthca">
-    <?= \himiklab\yii2\recaptcha\ReCaptcha::widget(['name' => 'reCaptcha']) ?>
+        <?= $form->field($model, 'reCaptcha')->widget(
+            \himiklab\yii2\recaptcha\ReCaptcha::className(),
+            ['siteKey' => '6Ld1e2wUAAAAALiGhc1HRGWZHfmPrbWZRdOnWzGh']
+        ) ?>
     </div>
     <div class="form-group">
         <div class="">

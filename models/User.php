@@ -14,6 +14,9 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         return 'users';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
@@ -25,6 +28,11 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         return false;
     }
 
+    /**
+     * Send confirmation email with link based on Users activationToken.
+     *
+     * @return bool
+     */
     public function sendConfirmMail(){
         $mail = Yii::$app->mailer->compose('confirm',
             ['confirmUrl' => Url::toRoute(['site/confirm', 'username' => $this->username, 'token' => $this->activationToken], true)])
